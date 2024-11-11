@@ -37,20 +37,25 @@ jobs:
           echo "GITHUB_REF_TYPE...............: ${GITHUB_REF_TYPE}"
           echo "-------------------------------------------------------------------------------------------------------"
 
-      - name: "Extract information (USE_CHECKOUT_REF)"
-        shell: bash
-        id: use_checkout_ref
-        run: |
-          USE_CHECKOUT_REF=''
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
-            USE_CHECKOUT_REF="${GITHUB_HEAD_REF}"            
-          fi
-          echo "ref=${USE_CHECKOUT_REF}" >> $GITHUB_OUTPUT
+#      - name: "Extract information (USE_CHECKOUT_REF)"
+#        shell: bash
+#        id: use_checkout_ref
+#        run: |
+#          USE_CHECKOUT_REF=''
+#          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+#            USE_CHECKOUT_REF="${GITHUB_HEAD_REF}"
+#          fi
+#          echo "ref=${USE_CHECKOUT_REF}" >> $GITHUB_OUTPUT
+#
+#      - name: Checkout ${{ steps.use_checkout_ref.outputs.ref }}
+#        uses: actions/checkout@v4
+#        with:
+#          ref: ${{ steps.use_checkout_ref.outputs.ref }}
 
-      - name: Checkout ${{ steps.use_checkout_ref.outputs.ref }}
+      - name: Checkout ${{ github.event_name == 'workflow_dispatch' && '' || github.head_ref }}
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.use_checkout_ref.outputs.ref }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && '' || github.head_ref }}
 
       - name: Output README.md
         shell: bash
