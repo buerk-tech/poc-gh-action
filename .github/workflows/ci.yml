@@ -7,7 +7,7 @@ on:
 
 jobs:
   testsuite:
-    name: all tests
+    name: all tests (v1)
     runs-on: ubuntu-latest
     steps:
 
