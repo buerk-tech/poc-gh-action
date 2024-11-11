@@ -1,0 +1,23 @@
+---
+name: "scheduled-main"
+on:
+  schedule:
+    - cron: '5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly-main:
+    name: "dispatch-nightly-main"
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout 'main'
+        uses: actions/checkout@v4
+        with:
+          ref: '1'
+
+      - name: Execute 'ci.yml' on '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run ci.yml --ref 1
